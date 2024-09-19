@@ -3,6 +3,7 @@ package com.example.crudpractice.user.controller;
 import com.example.crudpractice.user.entity.User;
 import com.example.crudpractice.user.service.UserService;
 import com.example.crudpractice.user.service.dto.UserUpdateDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,9 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestParam Long id,
                                         @RequestParam String name,
                                         @RequestParam String loginId,
-                                        @RequestParam String password) {
+                                        @RequestParam String password,
+                                        HttpServletRequest request) {
+        userService.validAuthorization(request);
         userService.updateUser(UserUpdateDTO.builder()
                                         .id(id)
                                         .name(name)
@@ -59,12 +62,9 @@ public class UserController {
     }
     //delete
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        Optional<User> user = userService.findUser(id);
-        if (user.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        userService.deleteUser(user.get());
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id, HttpServletRequest request) {
+        User user = userService.validAuthorization(request);
+        userService.deleteUser(user);
         return ResponseEntity.ok(null);
     }
 }

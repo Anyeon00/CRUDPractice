@@ -3,7 +3,10 @@ package com.example.crudpractice.post.controller;
 import com.example.crudpractice.post.entity.Post;
 import com.example.crudpractice.post.service.PostService;
 import com.example.crudpractice.post.service.dto.PostUpdateDTO;
+import com.example.crudpractice.user.entity.User;
 import com.example.crudpractice.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +23,13 @@ public class PostController {
     //create
     @PostMapping()
     public ResponseEntity<?> registerPost(@RequestParam String title,
-                                        @RequestParam String content,
-                                        @RequestParam Long userId) {
+                                          @RequestParam String content,
+                                          HttpServletRequest request) {
+        User user = userService.validAuthorization(request);
         postService.savePost(Post.builder()
                                     .title(title)
                                     .content(content)
-                                    .user(userService.findUser(userId).get())
+                                    .user(user)
                                     .build());
         return ResponseEntity.ok(null);
     }
@@ -48,7 +52,9 @@ public class PostController {
     @PutMapping
     public ResponseEntity<?> updatePost(@RequestParam Long id,
                                         @RequestParam String title,
-                                        @RequestParam String content) {
+                                        @RequestParam String content,
+                                        HttpServletRequest request) {
+        userService.validAuthorization(request);
         Post post = postService.updatePost(PostUpdateDTO.builder()
                 .id(id)
                 .title(title)
@@ -58,7 +64,8 @@ public class PostController {
     }
     //delete
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deletePost(@PathVariable("id") Long id, HttpServletRequest request) {
+        userService.validAuthorization(request);
         Optional<Post> post = postService.findPost(id);
         if (post.isEmpty()) {
             throw new IllegalArgumentException();
