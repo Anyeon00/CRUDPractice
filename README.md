@@ -15,3 +15,24 @@ DTO 고려 X, 스프링 validation X  <br>
 좋은 구조 고민에 시간을 오래 쓰기보단 일단 동작하게 만들고 계속 리팩토링 하는 방향으로 진행  <br>
 
 ![스크린샷 2024-09-09 오후 6 33 49](https://github.com/user-attachments/assets/37694cfc-84dd-4941-abf7-45f5b5e6c0a4)
+
+***
+
+### 1차 코드리뷰
+
+- ResponseEntity<?> 에서 와일드카드 대신 DTO사용
+
+- 인가처리서비스로직을 서비스보단 컨트롤러 레벨에서 처리하기
+Request나 Session같은건 웹이랑 밀접한 기술이므로 Service보다 컨트롤러단에서 처리 or 필터나인터셉터 유틸 이런거만들어서처리
+
+- 컨트롤러에서 findOne으로부터 Optional이 아닌 객체를 리턴받도록 처리
+그걸 처리해주는게 서비스이므로
+
+- n+1 문제 고려하기 **중요**
+
+- 변수명 tmp보다 더 명확한 의미의 변수명 사용 ex)findUser
+
+- 컨트롤러 URL 네이밍
+단건조회는 @GetMapping post/{id}
+전체조회는 @GetMapping post
+
