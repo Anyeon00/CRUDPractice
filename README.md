@@ -36,3 +36,7 @@ Request나 Session같은건 웹이랑 밀접한 기술이므로 Service보다 �
 단건조회는 @GetMapping post/{id}
 전체조회는 @GetMapping post
 
+***
+### 이후 리팩토링
+1. Repository에 N + 1 문제 개선 쿼리 메서드 추가
+2. Post 페이징 기능 추가
