@@ -30,8 +30,8 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
     //read _단건조회
-    @GetMapping
-    public ResponseEntity<?> findUser(Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findUser(@PathVariable("id") Long id) {
         Optional<User> user = userService.findUser(id);
         if (user.isEmpty()) {
             throw new IllegalArgumentException();
@@ -39,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok(user.get());
     }
     //read _전체조회
-    @GetMapping("/list")
+    @GetMapping()
     public ResponseEntity<?> findAllUsers() {
         List<User> allUsers = userService.findAllUsers();
         return ResponseEntity.ok(allUsers);

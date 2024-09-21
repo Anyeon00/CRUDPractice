@@ -6,6 +6,8 @@ import com.example.crudpractice.post.repository.CommentRepository;
 import com.example.crudpractice.post.repository.PostRepository;
 import com.example.crudpractice.post.service.dto.PostUpdateDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,4 +44,7 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    public Page<Post> findAllPosts(Pageable pageable) {
+        return postRepository.findAllPostsWithUserForPage(pageable);
+    }
 }

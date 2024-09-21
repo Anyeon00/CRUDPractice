@@ -1,13 +1,16 @@
 package com.example.crudpractice.post.controller;
 
+import com.example.crudpractice.post.controller.dto.responsedto.PostResponseDTO;
 import com.example.crudpractice.post.entity.Post;
 import com.example.crudpractice.post.service.PostService;
 import com.example.crudpractice.post.service.dto.PostUpdateDTO;
 import com.example.crudpractice.user.entity.User;
 import com.example.crudpractice.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class PostController {
     private final PostService postService;
     private final UserService userService;
+
     //create
     @PostMapping()
     public ResponseEntity<?> registerPost(@RequestParam String title,
@@ -34,8 +38,8 @@ public class PostController {
         return ResponseEntity.ok(null);
     }
     //read _단건조회
-    @GetMapping
-    public ResponseEntity<?> findPost(Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findPost(@PathVariable("id") Long id) {
         Optional<Post> post = postService.findPost(id);
         if (post.isEmpty()) {
             throw new IllegalArgumentException();
@@ -43,7 +47,7 @@ public class PostController {
         return ResponseEntity.ok(post.get());
     }
     //read _전체조회
-    @GetMapping("/list")
+    @GetMapping()
     public ResponseEntity<?> findAllPosts() {
         List<Post> allPosts = postService.findAllPosts();
         return ResponseEntity.ok(allPosts);
@@ -72,5 +76,16 @@ public class PostController {
         }
         postService.deletePost(post.get());
         return ResponseEntity.ok(null);
+    }
+
+    //페이징
+    @GetMapping("/page")
+    public ResponseEntity<Page> getPostPage(Pageable pageable) {
+        Page<Post> postPage = postService.findAllPosts(pageable);
+
+        List<PostResponseDTO> postDTOs = postPage.getContent().stream().map(PostResponseDTO::from).toList();
+        Page<PostResponseDTO> postDtoPage = new PageImpl<>(postDTOs, pageable, postPage.getTotalElements());
+
+        return ResponseEntity.ok(postDtoPage);
     }
 }
