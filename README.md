@@ -22,8 +22,8 @@ DTO 고려 X, 스프링 validation X  <br>
 
 - ResponseEntity<?> 에서 와일드카드 대신 DTO사용
 
-- 인가처리서비스로직을 서비스보단 컨트롤러 레벨에서 처리하기
-Request나 Session같은건 웹이랑 밀접한 기술이므로 Service보다 컨트롤러단에서 처리 or 필터나인터셉터 유틸 이런거만들어서처리
+- 인가처리서비스로직을 서비스보단 컨트롤러 레벨에서 처리하기 <br>
+Request나 Session같은건 웹이랑 밀접한 로직이므로 Service보다 컨트롤러단에서 처리 or 필터나 인터셉터 유틸 이런거만들어서처리
 
 - 컨트롤러에서 findOne으로부터 Optional이 아닌 객체를 리턴받도록 처리
 그걸 처리해주는게 서비스이므로
