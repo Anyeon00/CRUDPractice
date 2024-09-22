@@ -33,8 +33,8 @@ Request나 Session같은건 웹이랑 밀접한 기술이므로 Service보다 �
 - 변수명 tmp보다 더 명확한 의미의 변수명 사용 ex)findUser
 
 - 컨트롤러 URL 네이밍
-단건조회는 @GetMapping post/{id}
-전체조회는 @GetMapping post
+단건조회는 @GetMapping /post/{id}
+전체조회는 @GetMapping /post
 
 ***
 ### 이후 리팩토링
